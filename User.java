@@ -1,3 +1,3 @@
-public class App {
+public class User {
     
 }
