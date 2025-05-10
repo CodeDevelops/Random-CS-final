@@ -1,17 +1,34 @@
 public class Player extends Map {
     private int[] coords = { 0, 0 };
 
+    public Player() {
+        Tile[][] terrain = super.getTerrainData();
+
+        // Finds a safe place to spawn the player
+        for (int r = 0; r < terrain.length; r++) {
+            for (int c = 0; c < terrain[r].length; c++) {
+                if (terrain[r][c].getType().equals("air")) {
+                    coords[0] = c;
+                    coords[1] = r;
+                    moveTo(c, r);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Moves the player in a direction
     public boolean move(char direction) {
         boolean success;
         switch (direction) {
             case 'w':
-                success = moveTo(coords[0], coords[1] + 1);
+                success = moveTo(coords[0], coords[1] - 1);
                 break;
             case 'a':
                 success = moveTo(coords[0] - 1, coords[1]);
                 break;
             case 's':
-                success = moveTo(coords[0], coords[1] - 1);
+                success = moveTo(coords[0], coords[1] + 1);
                 break;
             case 'd':
                 success = moveTo(coords[0] + 1, coords[1]);
@@ -28,20 +45,20 @@ public class Player extends Map {
         return false;
     }
 
+    // Moves the player to a specific coordinate
     public boolean moveTo(int x, int y) {
-        if (checkPassable(x, y)) {
+        if (super.checkPassable(x, y)) {
             coords[0] = x;
             coords[1] = y;
-            super.redraw();
+            super.redraw(coords);
             return true;
         }
+        super.redraw(coords);
         return false;
     }
 
-    private boolean checkPassable(int x, int y) {
-        if (super.getTerrainData()[x][y].getType().equals("air")) {
-            return true;
-        }
-        return false;
+    // Returns the player's current coordinates
+    public int[] getCoords() {
+        return coords;
     }
 }

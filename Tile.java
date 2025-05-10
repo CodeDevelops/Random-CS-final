@@ -1,7 +1,7 @@
 public class Tile {
     public static final String[][] tyleTypes = {
-            { "air", " " },
-            { "wall", "[]" }
+            { "air", "  " },
+            { "wall", "██" }
     };
 
     private String type;
