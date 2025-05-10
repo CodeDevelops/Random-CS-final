@@ -5,16 +5,18 @@ public class Player extends Map {
         Tile[][] terrain = super.getTerrainData();
 
         // Finds a safe place to spawn the player
-        for (int r = 0; r < terrain.length; r++) {
-            for (int c = 0; c < terrain[r].length; c++) {
-                if (terrain[r][c].getType().equals("air")) {
-                    coords[0] = c;
-                    coords[1] = r;
-                    moveTo(c, r);
-                    break;
-                }
+        while (true) {
+            int x = random.nextInt(terrain[0].length);
+            int y = random.nextInt(terrain.length);
+
+            if (terrain[y][x].getType().equals("air")) {
+                coords[0] = x;
+                coords[1] = y;
+                break;
             }
         }
+
+        moveTo(coords[0], coords[1]);
     }
 
     // Moves the player in a direction

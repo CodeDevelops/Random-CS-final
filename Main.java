@@ -23,6 +23,9 @@ public class Main {
             if (cmd.equals("")) {
                 int[] coords = player.getCoords();
                 player.moveTo(coords[0], coords[1]);
+            } else if (cmd.equals("regen")) {
+                map = new Map(seed);
+                player = new Player();
             } else if (cmd.equals("exit")) {
                 System.out.println("Exiting...");
                 break;

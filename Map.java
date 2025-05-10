@@ -1,9 +1,9 @@
 import java.util.Random;
 
 public class Map {
-    private Tile[][] terrain = new Tile[10][10];
+    private Tile[][] terrain = new Tile[20][25];
     private String seed;
-    private Random random;
+    protected Random random;
 
     // Constructor for no provided seed
     public Map() {
@@ -45,22 +45,74 @@ public class Map {
             createRoom();
         }
 
+        addGoal();
+
         redraw(new int[] { 0, 0 });
     }
 
     private void createRoom() {
-        int roomWidth = 3 + random.nextInt(4);
-        int roomHeight = 3 + random.nextInt(4);
-        int x = random.nextInt(terrain[0].length - roomWidth - 1);
-        int y = random.nextInt(terrain.length - roomHeight - 1);
+        for (int attempt = 0; attempt < 100; attempt++) {
+            int roomWidth = 4 + random.nextInt(6);
+            int roomHeight = 4 + random.nextInt(6);
+            int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
+            int y = 1 + random.nextInt(terrain.length - roomHeight - 2);
 
-        for (int r = y; r < y + roomHeight; r++) {
-            for (int c = x; c < x + roomWidth; c++) {
-                if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
-                    terrain[r][c] = new Tile("wall");
-                } else {
-                    terrain[r][c] = new Tile("air");
+            // Check if the room can fit here without overlapping
+            if (canPlaceRoom(x, y, roomWidth, roomHeight)) {
+                // Place the room
+                for (int r = y; r < y + roomHeight; r++) {
+                    for (int c = x; c < x + roomWidth; c++) {
+                        if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
+                            terrain[r][c] = new Tile("wall");
+                        } else {
+                            terrain[r][c] = new Tile("air");
+                        }
+                    }
                 }
+                // Add an entrance
+                addEntrance(x, y, roomWidth, roomHeight);
+                return;
+            }
+        }
+    }
+
+    private boolean canPlaceRoom(int x, int y, int width, int height) {
+        for (int r = y - 1; r <= y + height; r++) {
+            for (int c = x - 1; c <= x + width; c++) {
+                if (!terrain[r][c].getType().equals("air")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void addEntrance(int x, int y, int width, int height) {
+        int wall = random.nextInt(4);
+        switch (wall) {
+            case 0: // Top wall
+                terrain[y][x + 1 + random.nextInt(width - 2)].setType("air");
+                break;
+            case 1: // Bottom wall
+                terrain[y + height - 1][x + 1 + random.nextInt(width - 2)].setType("air");
+                break;
+            case 2: // Left wall
+                terrain[y + 1 + random.nextInt(height - 2)][x].setType("air");
+                break;
+            case 3: // Right wall
+                terrain[y + 1 + random.nextInt(height - 2)][x + width - 1].setType("air");
+                break;
+        }
+    }
+
+    private void addGoal() {
+        while (true) {
+            int x = random.nextInt(terrain[0].length);
+            int y = random.nextInt(terrain.length);
+
+            if (terrain[y][x].getType().equals("air")) {
+                terrain[y][x].setType("goal");
+                break;
             }
         }
     }
