@@ -72,7 +72,7 @@ public class Map {
         for (int r = 0; r < terrain.length; r++) {
             for (int c = 0; c < terrain[r].length; c++) {
                 if (r == newCoords[1] && c == newCoords[0]) {
-                    System.out.print("PL");
+                    System.out.print("🔷");
                 } else {
                     boolean found = false;
                     for (String[] tileType : Tile.tyleTypes) {

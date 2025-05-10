@@ -15,7 +15,8 @@ public class Main {
 
         while (true) {
             System.out.println();
-            System.out.print("> ");
+            System.out.println("LVL 1 ▓░░░░░░░░░");
+            System.out.print("\n> ");
 
             String cmd = input.nextLine().toLowerCase();
 
