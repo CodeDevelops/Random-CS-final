@@ -21,6 +21,7 @@ public class Main {
 
         while (true) {
             if (game.getCurrentLevel() > Integer.parseInt(lvls)) {
+                Game.clearConsole();
                 System.out.println("You win!");
                 break;
             }

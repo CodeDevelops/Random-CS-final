@@ -9,8 +9,8 @@ public class Game {
     }
 
     public Game(int totalLevels) {
-        if (totalLevels < 1) {
-            totalLevels = 1;
+        if (totalLevels < 2) {
+            totalLevels = 2;
         }
 
         this.totalLevels = totalLevels;
