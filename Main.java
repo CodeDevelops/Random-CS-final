@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Map.clearConsole();
+        Game.clearConsole();
 
         Scanner input = new Scanner(System.in);
 
@@ -10,8 +10,8 @@ public class Main {
         System.out.print("> ");
         String seed = input.nextLine();
 
-        Map map = new Map(seed);
-        Player player = new Player();
+        Game game = new Game(seed);
+        Player player = game.getPlayer();
 
         while (true) {
             System.out.println();
@@ -23,18 +23,19 @@ public class Main {
             if (cmd.equals("")) {
                 int[] coords = player.getCoords();
                 player.moveTo(coords[0], coords[1]);
-            } else if (cmd.equals("regen")) {
-                map = new Map(seed);
-                player = new Player();
+            } else if (cmd.equals("restart")) {
+                game = new Game(seed);
+                player = game.getPlayer();
             } else if (cmd.equals("exit")) {
                 System.out.println("Exiting...");
-                break;
+
+                // Added because Visual Studio was giving warnings
+                input.close();
+                System.exit(0);
             } else {
                 player.move(cmd.charAt(0));
             }
         }
-
-        input.close();
 
     }
 }

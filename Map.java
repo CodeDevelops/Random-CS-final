@@ -1,22 +1,14 @@
 import java.util.Random;
 
-public class Map {
+public class Map extends Game {
     private Tile[][] terrain = new Tile[20][25];
-    private String seed;
     protected Random random;
 
-    // Constructor for no provided seed
     public Map() {
-        this("");
-    }
-
-    public Map(String seed) {
-        if (seed.equals("")) {
+        if (super.getSeed().equals("")) {
             random = new Random();
-            this.seed = Long.toString(random.nextLong());
         } else {
-            this.seed = seed;
-            random = new Random(seed.hashCode());
+            random = new Random(super.getSeed().hashCode());
         }
         generate();
     }
@@ -26,7 +18,7 @@ public class Map {
     }
 
     private void generate() {
-        clearConsole();
+        Game.clearConsole();
         System.out.println("Generating terrain...");
 
         for (int r = 0; r < terrain.length; r++) {
@@ -119,7 +111,7 @@ public class Map {
 
     // Redraws the entire map in the console
     public void redraw(int[] newCoords) {
-        clearConsole();
+        Game.clearConsole();
 
         for (int r = 0; r < terrain.length; r++) {
             for (int c = 0; c < terrain[r].length; c++) {
@@ -151,9 +143,4 @@ public class Map {
         return false;
     }
 
-    // Clears the console using an escape code (May not work on certain systems)
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
 }
