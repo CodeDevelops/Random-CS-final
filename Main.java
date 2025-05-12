@@ -19,9 +19,13 @@ public class Main {
             game = new Game(Integer.parseInt(lvls));
         }
 
-        player = game.getPlayer();
-
         while (true) {
+            if (game.getCurrentLevel() > Integer.parseInt(lvls)) {
+                System.out.println("You win!");
+                break;
+            }
+            player = game.getPlayer();
+
             System.out.println();
             System.out.println(game.toString());
             System.out.print("\n> ");
@@ -33,7 +37,6 @@ public class Main {
                 player.moveTo(coords[0], coords[1]);
             } else if (cmd.equals("restart")) {
                 game = new Game(Integer.parseInt(lvls));
-                player = game.getPlayer();
             } else if (cmd.equals("exit")) {
                 System.out.println("Exiting...");
 

@@ -35,11 +35,11 @@ public class Game {
 
     public String toString() {
         String returnString;
-        float perc = (level / totalLevels) * 10;
+        float perc = ((float) level / totalLevels) * 10;
 
         returnString = "LVL " + level + " / " + totalLevels + " ";
 
-        for (int i = 0; i < 10; i++) {
+        for (float i = 0; i < 10; i++) {
             if (perc > i) {
                 returnString += "▓";
             } else {
