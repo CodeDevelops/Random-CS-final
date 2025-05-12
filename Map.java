@@ -41,35 +41,27 @@ public class Map {
     }
 
     private void createRoom() {
-        int attempts = 0;
         while (true) {
-            if (attempts < 999) {
-                attempts++;
+            int roomWidth = 4 + random.nextInt(6);
+            int roomHeight = 4 + random.nextInt(6);
+            int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
+            int y = 1 + random.nextInt(terrain.length - roomHeight - 2);
 
-                int roomWidth = 4 + random.nextInt(6);
-                int roomHeight = 4 + random.nextInt(6);
-                int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
-                int y = 1 + random.nextInt(terrain.length - roomHeight - 2);
-
-                // Check if the room can fit here without overlapping
-                if (canPlaceRoom(x, y, roomWidth, roomHeight)) {
-                    // Place the room
-                    for (int r = y; r < y + roomHeight; r++) {
-                        for (int c = x; c < x + roomWidth; c++) {
-                            if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
-                                terrain[r][c] = new Tile("wall");
-                            } else {
-                                terrain[r][c] = new Tile("air");
-                            }
+            // Check if the room can fit here without overlapping
+            if (canPlaceRoom(x, y, roomWidth, roomHeight)) {
+                // Place the room
+                for (int r = y; r < y + roomHeight; r++) {
+                    for (int c = x; c < x + roomWidth; c++) {
+                        if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
+                            terrain[r][c] = new Tile("wall");
+                        } else {
+                            terrain[r][c] = new Tile("air");
                         }
                     }
-                    // Add an entrance
-                    addEntrance(x, y, roomWidth, roomHeight);
-                    return;
                 }
-            } else {
-                System.out.println("[!] Failed to generate goal location.");
-                System.exit(1);
+                // Add an entrance
+                addEntrance(x, y, roomWidth, roomHeight);
+                return;
             }
         }
     }

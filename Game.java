@@ -9,6 +9,10 @@ public class Game {
     }
 
     public Game(int totalLevels) {
+        if (totalLevels < 1) {
+            totalLevels = 1;
+        }
+
         this.totalLevels = totalLevels;
         level = 0;
 
@@ -42,7 +46,7 @@ public class Game {
                 returnString += "░";
             }
         }
-        
+
         return returnString;
     }
 

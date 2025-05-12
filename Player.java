@@ -11,22 +11,14 @@ public class Player {
         Random random = map.random;
 
         // Finds a safe place to spawn the player
-        int attempts = 0;
         while (true) {
-            if (attempts < 999) {
-                attempts++;
+            int x = random.nextInt(terrain[0].length);
+            int y = random.nextInt(terrain.length);
 
-                int x = random.nextInt(terrain[0].length);
-                int y = random.nextInt(terrain.length);
-
-                if (terrain[y][x].getType().equals("air")) {
-                    coords[0] = x;
-                    coords[1] = y;
-                    break;
-                }
-            } else {
-                System.out.println("[!] Failed to find a safe place to spawn the player.");
-                System.exit(1);
+            if (terrain[y][x].getType().equals("air")) {
+                coords[0] = x;
+                coords[1] = y;
+                break;
             }
         }
 
