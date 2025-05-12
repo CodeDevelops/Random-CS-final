@@ -1,15 +1,13 @@
 import java.util.Random;
 
-public class Map extends Game {
+public class Map {
     private Tile[][] terrain = new Tile[20][25];
     protected Random random;
+    private Game game;
 
-    public Map() {
-        if (super.getSeed().equals("")) {
-            random = new Random();
-        } else {
-            random = new Random(super.getSeed().hashCode());
-        }
+    public Map(Game gameObj) {
+        game = gameObj;
+        random = new Random();
         generate();
     }
 
@@ -43,27 +41,35 @@ public class Map extends Game {
     }
 
     private void createRoom() {
-        for (int attempt = 0; attempt < 100; attempt++) {
-            int roomWidth = 4 + random.nextInt(6);
-            int roomHeight = 4 + random.nextInt(6);
-            int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
-            int y = 1 + random.nextInt(terrain.length - roomHeight - 2);
+        int attempts = 0;
+        while (true) {
+            if (attempts < 999) {
+                attempts++;
 
-            // Check if the room can fit here without overlapping
-            if (canPlaceRoom(x, y, roomWidth, roomHeight)) {
-                // Place the room
-                for (int r = y; r < y + roomHeight; r++) {
-                    for (int c = x; c < x + roomWidth; c++) {
-                        if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
-                            terrain[r][c] = new Tile("wall");
-                        } else {
-                            terrain[r][c] = new Tile("air");
+                int roomWidth = 4 + random.nextInt(6);
+                int roomHeight = 4 + random.nextInt(6);
+                int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
+                int y = 1 + random.nextInt(terrain.length - roomHeight - 2);
+
+                // Check if the room can fit here without overlapping
+                if (canPlaceRoom(x, y, roomWidth, roomHeight)) {
+                    // Place the room
+                    for (int r = y; r < y + roomHeight; r++) {
+                        for (int c = x; c < x + roomWidth; c++) {
+                            if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
+                                terrain[r][c] = new Tile("wall");
+                            } else {
+                                terrain[r][c] = new Tile("air");
+                            }
                         }
                     }
+                    // Add an entrance
+                    addEntrance(x, y, roomWidth, roomHeight);
+                    return;
                 }
-                // Add an entrance
-                addEntrance(x, y, roomWidth, roomHeight);
-                return;
+            } else {
+                System.out.println("[!] Failed to generate goal location.");
+                System.exit(1);
             }
         }
     }
@@ -111,6 +117,11 @@ public class Map extends Game {
 
     // Redraws the entire map in the console
     public void redraw(int[] newCoords) {
+        if (terrain[newCoords[1]][newCoords[0]].getType() == "goal") {
+            game.nextLevel();
+            return;
+        }
+
         Game.clearConsole();
 
         for (int r = 0; r < terrain.length; r++) {
@@ -137,7 +148,7 @@ public class Map extends Game {
 
     // Checks if the selected tile given a coordinate is passable
     protected boolean checkPassable(int x, int y) {
-        if (terrain[y][x].getType().equals("air")) {
+        if (terrain[y][x].getType().equals("air") || terrain[y][x].getType().equals("goal")) {
             return true;
         }
         return false;

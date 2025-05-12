@@ -1,13 +1,19 @@
-public class Player extends Map {
-    private int[] coords = { 0, 0 };
+import java.util.Random;
 
-    public Player() {
-        Tile[][] terrain = super.getTerrainData();
+public class Player {
+    private int[] coords = { 0, 0 };
+    private final Map map;
+
+    public Player(Map map) {
+        this.map = map;
+
+        Tile[][] terrain = map.getTerrainData();
+        Random random = map.random;
 
         // Finds a safe place to spawn the player
         int attempts = 0;
         while (true) {
-            if (attempts < 50) {
+            if (attempts < 999) {
                 attempts++;
 
                 int x = random.nextInt(terrain[0].length);
@@ -19,7 +25,7 @@ public class Player extends Map {
                     break;
                 }
             } else {
-                System.out.println("Failed to find a safe place to spawn the player.");
+                System.out.println("[!] Failed to find a safe place to spawn the player.");
                 System.exit(1);
             }
         }
@@ -57,13 +63,13 @@ public class Player extends Map {
 
     // Moves the player to a specific coordinate
     public boolean moveTo(int x, int y) {
-        if (super.checkPassable(x, y)) {
+        if (map.checkPassable(x, y)) {
             coords[0] = x;
             coords[1] = y;
-            super.redraw(coords);
+            map.redraw(coords);
             return true;
         }
-        super.redraw(coords);
+        map.redraw(coords);
         return false;
     }
 

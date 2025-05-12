@@ -1,16 +1,15 @@
 public class Game {
     private Map map;
     private Player player;
-    private final String seed;
-
     private int level;
+    public final int totalLevels;
 
     public Game() {
-        this("");
+        this((int) (Math.random() * (14 - 5 + 1) + 5));
     }
 
-    public Game(String seed) {
-        this.seed = seed;
+    public Game(int totalLevels) {
+        this.totalLevels = totalLevels;
         level = 0;
 
         nextLevel();
@@ -20,18 +19,31 @@ public class Game {
         return player;
     }
 
-    public int getLevel() {
+    public int getCurrentLevel() {
         return level;
-    }
-
-    public String getSeed() {
-        return seed;
     }
 
     protected void nextLevel() {
         level++;
-        map = new Map();
-        player = new Player();
+        map = new Map(this);
+        player = new Player(map);
+    }
+
+    public String toString() {
+        String returnString;
+        float perc = (level / totalLevels) * 10;
+
+        returnString = "LVL " + level + " / " + totalLevels + " ";
+
+        for (int i = 0; i < 10; i++) {
+            if (perc > i) {
+                returnString += "▓";
+            } else {
+                returnString += "░";
+            }
+        }
+        
+        return returnString;
     }
 
     // Clears the console using an escape code (May not work on certain systems)

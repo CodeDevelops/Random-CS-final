@@ -6,16 +6,24 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
 
-        System.out.println("Enter a map seed:");
+        System.out.println("Enter number of levels (Leave blank for random)");
         System.out.print("> ");
-        String seed = input.nextLine();
+        String lvls = input.nextLine();
 
-        Game game = new Game(seed);
-        Player player = game.getPlayer();
+        Game game;
+        Player player;
+
+        if (lvls.equals("")) {
+            game = new Game();
+        } else {
+            game = new Game(Integer.parseInt(lvls));
+        }
+
+        player = game.getPlayer();
 
         while (true) {
             System.out.println();
-            System.out.println("LVL 1 ▓░░░░░░░░░");
+            System.out.println(game.toString());
             System.out.print("\n> ");
 
             String cmd = input.nextLine().toLowerCase();
@@ -24,7 +32,7 @@ public class Main {
                 int[] coords = player.getCoords();
                 player.moveTo(coords[0], coords[1]);
             } else if (cmd.equals("restart")) {
-                game = new Game(seed);
+                game = new Game(Integer.parseInt(lvls));
                 player = game.getPlayer();
             } else if (cmd.equals("exit")) {
                 System.out.println("Exiting...");
