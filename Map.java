@@ -100,10 +100,27 @@ public class Map {
             int x = random.nextInt(terrain[0].length);
             int y = random.nextInt(terrain.length);
 
-            final boolean goalLocked = random.nextInt(4) == 0;
+            final boolean goalLocked = random.nextInt(2) == 1;
 
             if (terrain[y][x].getType().equals("air")) {
-                terrain[y][x] = new Goal(goalLocked);
+                final Goal goal = new Goal(goalLocked);
+                terrain[y][x] = goal;
+
+                if (goalLocked) {
+                    addSwitch(goal);
+                }
+                break;
+            }
+        }
+    }
+
+    private void addSwitch(Goal goal) {
+        while (true) {
+            int x = random.nextInt(terrain[0].length);
+            int y = random.nextInt(terrain.length);
+
+            if (terrain[y][x].getType().equals("air")) {
+                terrain[y][x] = new Switch(goal);
                 break;
             }
         }
