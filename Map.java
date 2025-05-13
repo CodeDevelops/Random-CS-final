@@ -100,7 +100,7 @@ public class Map {
             int x = random.nextInt(terrain[0].length);
             int y = random.nextInt(terrain.length);
 
-            final boolean goalLocked = random.nextInt(2) == 1;
+            final boolean goalLocked = game.getCurrentLevel() >= 5 && random.nextInt(2) == 1;
 
             if (terrain[y][x].getType().equals("air")) {
                 final Goal goal = new Goal(goalLocked);
