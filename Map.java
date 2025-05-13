@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class Map {
-    private Tile[][] terrain;
+    private Tile[][] terrain = new Tile[20][25];
 
     protected Random random;
     private Game game;
@@ -12,12 +12,6 @@ public class Map {
         random = new Random();
 
         currentLevel = game.getCurrentLevel();
-
-        if (currentLevel > 3) {
-            terrain = new Tile[5 + (currentLevel / 2)][5 + (currentLevel / 2)];
-        } else {
-            terrain = new Tile[5][5];
-        }
 
         generate();
     }
@@ -41,7 +35,7 @@ public class Map {
             }
         }
 
-        if (currentLevel > 30) {
+        if (currentLevel >= 15) {
             int roomCount = 3 + random.nextInt(3);
             for (int i = 0; i < roomCount; i++) {
                 createRoom();
@@ -113,7 +107,7 @@ public class Map {
             int x = random.nextInt(terrain[0].length);
             int y = random.nextInt(terrain.length);
 
-            final boolean goalLocked = game.getCurrentLevel() >= 5 && random.nextInt(2) == 1;
+            final boolean goalLocked = game.getCurrentLevel() >= 10 && random.nextInt(2) == 1;
 
             if (terrain[y][x].getType().equals("air")) {
                 final Goal goal = new Goal(goalLocked);
