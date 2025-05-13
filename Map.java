@@ -1,13 +1,24 @@
 import java.util.Random;
 
 public class Map {
-    private Tile[][] terrain = new Tile[20][25];
+    private Tile[][] terrain;
+
     protected Random random;
     private Game game;
+    final int currentLevel;
 
     public Map(Game gameObj) {
         game = gameObj;
         random = new Random();
+
+        currentLevel = game.getCurrentLevel();
+
+        if (currentLevel > 3) {
+            terrain = new Tile[5 + (currentLevel / 2)][5 + (currentLevel / 2)];
+        } else {
+            terrain = new Tile[5][5];
+        }
+
         generate();
     }
 
@@ -30,9 +41,11 @@ public class Map {
             }
         }
 
-        int roomCount = 3 + random.nextInt(3);
-        for (int i = 0; i < roomCount; i++) {
-            createRoom();
+        if (currentLevel > 30) {
+            int roomCount = 3 + random.nextInt(3);
+            for (int i = 0; i < roomCount; i++) {
+                createRoom();
+            }
         }
 
         addGoal();
