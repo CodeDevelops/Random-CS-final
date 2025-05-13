@@ -23,9 +23,9 @@ public class Map {
             for (int c = 0; c < terrain[r].length; c++) {
                 // Generates wall border around map
                 if (r == 0 || r == terrain.length - 1 || c == 0 || c == terrain[r].length - 1) {
-                    terrain[r][c] = new Tile("wall");
+                    terrain[r][c] = new Wall();
                 } else {
-                    terrain[r][c] = new Tile("air");
+                    terrain[r][c] = new Air();
                 }
             }
         }
@@ -53,9 +53,9 @@ public class Map {
                 for (int r = y; r < y + roomHeight; r++) {
                     for (int c = x; c < x + roomWidth; c++) {
                         if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
-                            terrain[r][c] = new Tile("wall");
+                            terrain[r][c] = new Wall();
                         } else {
-                            terrain[r][c] = new Tile("air");
+                            terrain[r][c] = new Air();
                         }
                     }
                 }
@@ -81,16 +81,16 @@ public class Map {
         int wall = random.nextInt(4);
         switch (wall) {
             case 0: // Top wall
-                terrain[y][x + 1 + random.nextInt(width - 2)].setType("air");
+                terrain[y][x + 1 + random.nextInt(width - 2)] = new Air();
                 break;
             case 1: // Bottom wall
-                terrain[y + height - 1][x + 1 + random.nextInt(width - 2)].setType("air");
+                terrain[y + height - 1][x + 1 + random.nextInt(width - 2)] = new Air();
                 break;
             case 2: // Left wall
-                terrain[y + 1 + random.nextInt(height - 2)][x].setType("air");
+                terrain[y + 1 + random.nextInt(height - 2)][x] = new Air();
                 break;
             case 3: // Right wall
-                terrain[y + 1 + random.nextInt(height - 2)][x + width - 1].setType("air");
+                terrain[y + 1 + random.nextInt(height - 2)][x + width - 1] = new Air();
                 break;
         }
     }
@@ -100,8 +100,10 @@ public class Map {
             int x = random.nextInt(terrain[0].length);
             int y = random.nextInt(terrain.length);
 
+            final boolean goalLocked = random.nextInt(4) == 0;
+
             if (terrain[y][x].getType().equals("air")) {
-                terrain[y][x].setType("goal");
+                terrain[y][x] = new Goal(goalLocked);
                 break;
             }
         }
@@ -121,17 +123,7 @@ public class Map {
                 if (r == newCoords[1] && c == newCoords[0]) {
                     System.out.print("🔷");
                 } else {
-                    boolean found = false;
-                    for (String[] tileType : Tile.tyleTypes) {
-                        if (terrain[r][c].getType().equals(tileType[0])) {
-                            found = true;
-                            System.out.print(tileType[1]);
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        System.out.print("XX");
-                    }
+                    System.out.print(terrain[r][c].getTileChar());
                 }
             }
             System.out.println();
@@ -140,7 +132,7 @@ public class Map {
 
     // Checks if the selected tile given a coordinate is passable
     protected boolean checkPassable(int x, int y) {
-        if (terrain[y][x].getType().equals("air") || terrain[y][x].getType().equals("goal")) {
+        if (!terrain[y][x].isSolid()) {
             return true;
         }
         return false;

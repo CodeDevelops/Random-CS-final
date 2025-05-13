@@ -1,33 +1,29 @@
-public class Tile {
-    public static final String[][] tyleTypes = {
-            { "air", "  " },
-            { "wall", "██" },
-            { "goal", "▓▓" },
-    };
+public abstract class Tile implements TileInterface {
+    private final String type;
+    protected String tileChar;
+    protected boolean isSolid;
 
-    private String type;
+    protected Tile(String type, String tileChar) {
+        this(type, tileChar, true);
+    }
 
-    public Tile(String type) {
+    protected Tile(String type, String tileChar, boolean isSolid) {
         this.type = type;
+        this.tileChar = tileChar;
+        this.isSolid = isSolid;
     }
 
     public String getType() {
         return type;
     }
 
-    public boolean setType(String type) {
-        boolean found = false;
-
-        for (String[] tiletype : tyleTypes) {
-            if (tiletype[0].equals(type)) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            this.type = type;
-        }
-        return found;
+    public String getTileChar() {
+        return tileChar;
     }
+
+    public boolean isSolid() {
+        return isSolid;
+    }
+
+    abstract public void interact();
 }
