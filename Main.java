@@ -18,6 +18,7 @@ public class Main {
         } else {
             game = new Game(Integer.parseInt(lvls));
         }
+        lvls = Integer.toString(game.totalLevels);
 
         while (true) {
             if (game.getCurrentLevel() > Integer.parseInt(lvls)) {
