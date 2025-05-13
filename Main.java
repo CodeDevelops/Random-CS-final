@@ -37,6 +37,8 @@ public class Main {
             if (cmd.equals("")) {
                 int[] coords = player.getCoords();
                 player.moveTo(coords[0], coords[1]);
+            } else if (cmd.equals("e")) {
+                player.interact();
             } else if (cmd.equals("restart")) {
                 game = new Game(Integer.parseInt(lvls));
             } else if (cmd.equals("exit")) {
