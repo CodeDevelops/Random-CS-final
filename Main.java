@@ -29,6 +29,7 @@ public class Main {
             player = game.getPlayer();
 
             System.out.println();
+            System.out.println("Move: [W][A][S][D] + [ENTER]  |  Interact: [E] + [ENTER]");
             System.out.println(game.toString());
             System.out.print("\n> ");
 
