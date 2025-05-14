@@ -20,11 +20,11 @@ public class Player {
             if (terrain[y][x].getType().equals("air")) {
                 coords[0] = x;
                 coords[1] = y;
-                break;
+                
+                moveTo(coords[0], coords[1]);
+                return;
             }
         }
-
-        moveTo(coords[0], coords[1]);
     }
 
     // Moves the player in a direction

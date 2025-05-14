@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class Map {
+    private Game game;
     private Tile[][] terrain = new Tile[20][25];
 
     protected Random random;
-    private Game game;
     final int currentLevel;
 
     public Map(Game gameObj) {
@@ -24,9 +24,9 @@ public class Map {
         Game.clearConsole();
         System.out.println("Generating terrain...");
 
+        // Generates border around map
         for (int r = 0; r < terrain.length; r++) {
             for (int c = 0; c < terrain[r].length; c++) {
-                // Generates wall border around map
                 if (r == 0 || r == terrain.length - 1 || c == 0 || c == terrain[r].length - 1) {
                     terrain[r][c] = new Wall();
                 } else {
@@ -35,20 +35,23 @@ public class Map {
             }
         }
 
-        if (currentLevel >= 15) {
-            int roomCount = 3 + random.nextInt(3);
-            for (int i = 0; i < roomCount; i++) {
-                createRoom();
-            }
+        // Generate random num of rooms
+        int roomCount = 2 + random.nextInt(4);
+        for (int i = 0; i < roomCount; i++) {
+            createRoom();
         }
 
+        
         addGoal();
-
-        redraw(new int[] { 0, 0 });
+        redraw(new int[] {0, 0});
     }
 
-    private void createRoom() {
-        while (true) {
+    private boolean createRoom() {
+        int attempts = 0;
+        // Failsave in case algorithm can never generate a pattern with x number of rooms within sufficient space
+        while (attempts < 3000) {
+            attempts++;
+
             int roomWidth = 4 + random.nextInt(6);
             int roomHeight = 4 + random.nextInt(6);
             int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
@@ -68,9 +71,10 @@ public class Map {
                 }
                 // Add an entrance
                 addEntrance(x, y, roomWidth, roomHeight);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     private boolean canPlaceRoom(int x, int y, int width, int height) {
