@@ -67,6 +67,7 @@ public class Player {
         return false;
     }
 
+    // Calls the `interact()` method on neighboring tiles (X-1/X+1/Y-1/Y+1)
     public void interact() {
         for (int i = neighbors.size() - 1; i >= 0; i--) {
             neighbors.remove(i);

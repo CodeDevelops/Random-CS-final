@@ -16,10 +16,12 @@ public class Map {
         generate();
     }
 
+    // Returns terrain data
     public Tile[][] getTerrainData() {
         return terrain;
     }
 
+    // Generates the map and calls helper methods to add goals and switches
     private void generate() {
         Game.clearConsole();
         System.out.println("Generating terrain...");
@@ -46,9 +48,10 @@ public class Map {
         redraw(new int[] {0, 0});
     }
 
+    // Generates an additional room within the map, given there is enough space for the algorithm to do so
     private boolean createRoom() {
+        // Failsave in case algorithm can never generate a room within sufficient space
         int attempts = 0;
-        // Failsave in case algorithm can never generate a pattern with x number of rooms within sufficient space
         while (attempts < 3000) {
             attempts++;
 
@@ -57,9 +60,8 @@ public class Map {
             int x = 1 + random.nextInt(terrain[0].length - roomWidth - 2);
             int y = 1 + random.nextInt(terrain.length - roomHeight - 2);
 
-            // Check if the room can fit here without overlapping
+            // Check if the room can fit without overlapping
             if (canPlaceRoom(x, y, roomWidth, roomHeight)) {
-                // Place the room
                 for (int r = y; r < y + roomHeight; r++) {
                     for (int c = x; c < x + roomWidth; c++) {
                         if (r == y || r == y + roomHeight - 1 || c == x || c == x + roomWidth - 1) {
@@ -69,7 +71,6 @@ public class Map {
                         }
                     }
                 }
-                // Add an entrance
                 addEntrance(x, y, roomWidth, roomHeight);
                 return true;
             }
@@ -77,6 +78,7 @@ public class Map {
         return false;
     }
 
+    // Check if there is sufficient space to insert the roon
     private boolean canPlaceRoom(int x, int y, int width, int height) {
         for (int r = y - 1; r <= y + height; r++) {
             for (int c = x - 1; c <= x + width; c++) {
@@ -88,6 +90,7 @@ public class Map {
         return true;
     }
 
+    // Adds a "door" to a random side of the room
     private void addEntrance(int x, int y, int width, int height) {
         int wall = random.nextInt(4);
         switch (wall) {
@@ -120,7 +123,7 @@ public class Map {
                 if (goalLocked) {
                     addSwitch(goal);
                 }
-                break;
+                return;
             }
         }
     }
@@ -132,7 +135,7 @@ public class Map {
 
             if (terrain[y][x].getType().equals("air")) {
                 terrain[y][x] = new Switch(goal);
-                break;
+                return;
             }
         }
     }
